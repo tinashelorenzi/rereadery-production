@@ -1,0 +1,67 @@
+:root {
+  --dark-olive-green: #455A35;
+  --dark-navy-blue: #1F2A36;
+  --off-black: #333;
+  --white: #FFF;
+  --black: #000;
+  --off-white: #DDD;
+  --dark-green: #3B4D3F;
+  --grey: #696969;
+  --beige: #D9A07B;
+  --neon-green: #86AF67;
+  --go-green: #5CB85C;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--dark-olive-green);
+  color: var(--off-black);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.header {
+  background-color: var(--dark-navy-blue);
+  color: var(--white);
+}
+
+.footer {
+  background-color: var(--dark-navy-blue);
+  color: var(--white);
+}
+
+.account-dropdown {
+  background-color: var(--off-white);
+  color: var(--black);
+}
+
+.button-primary {
+  background-color: var(--dark-green);
+  color: var(--white);
+}
+
+.button-cart {
+  background-color: var(--neon-green);
+  color: var(--white);
+}
+
+.cart-page {
+  background-color: var(--go-green);
+}
+
+.soft-bg {
+  background-color: var(--grey);
+}
+
+.light-bg {
+  background-color: var(--beige);
+}
