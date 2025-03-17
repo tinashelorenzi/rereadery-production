@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../services/auth';
+import { useAuth } from '../services/AuthContext';
 
 interface HeaderProps {
   cartItemCount?: number;

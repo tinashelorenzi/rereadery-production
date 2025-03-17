@@ -108,7 +108,7 @@ const ContentModeration: React.FC = () => {
   };
 
   const getStatusChip = (status: string) => {
-    const statusColors = {
+    const statusColors: Record<string, 'default' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'> = {
       pending: 'warning',
       approved: 'success',
       rejected: 'error'

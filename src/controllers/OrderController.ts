@@ -1,10 +1,30 @@
 import { Request, Response } from 'express';
+import { RowDataPacket, OkPacket } from 'mysql2';
+
+interface AuthenticatedRequest extends Request {
+  user?: {
+    id: string;
+  };
+}
+
+interface BookDetails extends RowDataPacket {
+  price: number;
+  seller_id: string;
+}
+
+interface CartStatus extends RowDataPacket {
+  cart_item_id: string;
+}
+
+interface Order extends RowDataPacket {
+  seller_id: string;
+}
 import { pool } from '../database/connection';
 import { v4 as uuidv4 } from 'uuid';
 
 export class OrderController {
   // Create a new order
-  async createOrder(req: Request, res: Response) {
+  async createOrder(req: AuthenticatedRequest, res: Response) {
     try {
       const { books, deliveryMethod, shippingDetails } = req.body;
       const buyerId = req.user?.id;
@@ -20,7 +40,7 @@ export class OrderController {
 
         // Calculate total amount and verify book availability
         for (const book of books) {
-          const [bookDetails] = await connection.query(
+          const [bookDetails] = await connection.query<BookDetails[]>(
             'SELECT price, seller_id FROM books WHERE book_id = ?',
             [book.bookId]
           );
@@ -30,7 +50,7 @@ export class OrderController {
           }
 
           // Check if book is in someone's cart
-          const [cartStatus] = await connection.query(
+          const [cartStatus] = await connection.query<CartStatus[]>(
             'SELECT cart_item_id FROM cart_items WHERE book_id = ?',
             [book.bookId]
           );
@@ -97,13 +117,13 @@ export class OrderController {
         connection.release();
       }
     } catch (error) {
-      console.error('Error creating order:', error);
+      console.error('Error creating order:', error instanceof Error ? error.message : 'Unknown error');
       res.status(500).json({ message: error.message || 'Internal server error' });
     }
   }
 
   // Get buyer's orders
-  async getBuyerOrders(req: Request, res: Response) {
+  async getBuyerOrders(req: AuthenticatedRequest, res: Response) {
     try {
       const buyerId = req.user?.id;
       const { status } = req.query;
@@ -139,7 +159,7 @@ export class OrderController {
   }
 
   // Get seller's orders
-  async getSellerOrders(req: Request, res: Response) {
+  async getSellerOrders(req: AuthenticatedRequest, res: Response) {
     try {
       const sellerId = req.user?.id;
       const { status } = req.query;
@@ -175,14 +195,14 @@ export class OrderController {
   }
 
   // Update order status
-  async updateOrderStatus(req: Request, res: Response) {
+  async updateOrderStatus(req: AuthenticatedRequest, res: Response) {
     try {
       const { orderId } = req.params;
       const { status } = req.body;
       const userId = req.user?.id;
 
       // Verify order ownership
-      const [order] = await pool.query(
+      const [order] = await pool.query<Order[]>(
         'SELECT seller_id FROM orders WHERE order_id = ?',
         [orderId]
       );
@@ -213,7 +233,7 @@ export class OrderController {
       const { orderId } = req.params;
       const userId = req.user?.id;
 
-      const [order] = await pool.query(
+      const [order] = await pool.query<Order[]>(
         `SELECT o.*, oi.collection_code,
           b.title, b.author, b.image,
           seller.name as seller_name,
