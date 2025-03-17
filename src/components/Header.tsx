@@ -14,11 +14,11 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount = 0, wishlistItemC
   const isHomePage = location.pathname === '/';
 
   return (
-    <header className="bg-[var(--color-navy)] text-[var(--color-white)] fixed w-full top-0 z-[var(--z-header)]">
+    <header className="bg-secondary/95 backdrop-blur-glass text-white fixed w-full top-0 z-50 shadow-glass">
       <div className="container mx-auto px-4 h-[var(--header-height)] flex items-center justify-between">
         {/* Logo and Brand */}
-        <Link to="/" className="flex items-center space-x-2">
-          <img src="/logo.svg" alt="ReReadery" className="h-8 w-8" />
+        <Link to="/" className="flex items-center space-x-2 hover:text-primary-light transition-colors">
+          <img src="/logo.svg" alt="ReReadery" className="h-8 w-8 hover:filter hover:brightness-110 transition-all" />
           <span className="text-xl font-bold">ReReadery</span>
         </Link>
 
@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount = 0, wishlistItemC
               <input
                 type="search"
                 placeholder="Search for books..."
-                className="w-full px-4 py-2 rounded-full bg-[var(--color-gray-100)] text-[var(--color-gray-900)]"
+                className="w-full px-4 py-2 rounded-full bg-white/90 text-secondary-dark focus:ring-2 focus:ring-primary/50 focus:outline-none transition-all"
               />
             </div>
           ) : (
@@ -43,34 +43,34 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount = 0, wishlistItemC
         <nav className="hidden md:flex items-center space-x-6">
           {isAuthenticated ? (
             <>
-              <Link to="/orders" className="hover:text-[var(--color-gray-300)]">Orders</Link>
-              <Link to="/wishlist" className="hover:text-[var(--color-gray-300)] relative">
+              <Link to="/orders" className="hover:text-primary-light transition-colors">Orders</Link>
+              <Link to="/wishlist" className="hover:text-primary-light transition-colors relative">
                 Wishlist
                 {wishlistItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-[var(--color-olive)] text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center shadow-glow">
                     {wishlistItemCount}
                   </span>
                 )}
               </Link>
-              <Link to="/cart" className="hover:text-[var(--color-gray-300)] relative">
+              <Link to="/cart" className="hover:text-primary-light transition-colors relative">
                 Cart
                 {cartItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-[var(--color-olive)] text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center shadow-glow">
                     {cartItemCount}
                   </span>
                 )}
               </Link>
               <div className="relative group">
-                <button className="hover:text-[var(--color-gray-300)]">
+                <button className="hover:text-primary-light transition-colors">
                   Account
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block">
-                  <Link to="/account" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                <div className="absolute right-0 mt-2 w-48 glass-panel py-1 hidden group-hover:block">
+                  <Link to="/account" className="block px-4 py-2 text-sm text-secondary-dark hover:bg-primary/10 transition-colors">
                     Account Details
                   </Link>
                   <button
                     onClick={logout}
-                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 text-sm text-secondary-dark hover:bg-primary/10 transition-colors"
                   >
                     Sign Out
                   </button>
@@ -120,7 +120,7 @@ export const Header: React.FC<HeaderProps> = ({ cartItemCount = 0, wishlistItemC
               <input
                 type="search"
                 placeholder="Search for books..."
-                className="w-full px-4 py-2 rounded-full bg-[var(--color-gray-100)] text-[var(--color-gray-900)]"
+                className="w-full px-4 py-2 rounded-full bg-white/90 text-secondary-dark focus:ring-2 focus:ring-primary/50 focus:outline-none transition-all"
               />
             </div>
             <nav className="px-4 py-2 space-y-2">

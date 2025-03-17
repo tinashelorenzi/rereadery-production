@@ -5,16 +5,16 @@ export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-[var(--color-navy)] text-[var(--color-white)] mt-auto">
+    <footer className="bg-secondary/95 backdrop-blur-glass text-white mt-auto shadow-glass">
       <div className="container mx-auto px-4 py-8 h-[var(--footer-height)]">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <Link to="/" className="flex items-center space-x-2">
-              <img src="/logo.svg" alt="ReReadery" className="h-8 w-8" />
+            <Link to="/" className="flex items-center space-x-2 hover:text-primary-light transition-colors">
+              <img src="/logo.svg" alt="ReReadery" className="h-8 w-8 hover:filter hover:brightness-110 transition-all" />
               <span className="text-xl font-bold">ReReadery</span>
             </Link>
-            <p className="text-[var(--color-gray-400)] text-sm">
+            <p className="text-white/70 text-sm">
               Giving books a second chance and readers a sustainable way to enjoy literature.
             </p>
           </div>
@@ -24,17 +24,17 @@ export const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/privacy-policy" className="text-[var(--color-gray-400)] hover:text-white transition-colors">
+                <Link to="/privacy-policy" className="text-white/70 hover:text-primary-light transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/terms-of-service" className="text-[var(--color-gray-400)] hover:text-white transition-colors">
+                <Link to="/terms-of-service" className="text-white/70 hover:text-primary-light transition-colors">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link to="/cookie-policy" className="text-[var(--color-gray-400)] hover:text-white transition-colors">
+                <Link to="/cookie-policy" className="text-white/70 hover:text-primary-light transition-colors">
                   Cookie Policy
                 </Link>
               </li>
@@ -49,7 +49,7 @@ export const Footer: React.FC = () => {
                 href="https://facebook.com/rereadery"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--color-gray-400)] hover:text-white transition-colors"
+                className="text-white/70 hover:text-primary-light transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -60,7 +60,7 @@ export const Footer: React.FC = () => {
                 href="https://twitter.com/rereadery"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--color-gray-400)] hover:text-white transition-colors"
+                className="text-white/70 hover:text-primary-light transition-colors"
                 aria-label="Twitter"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
                 href="https://instagram.com/rereadery"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--color-gray-400)] hover:text-white transition-colors"
+                className="text-white/70 hover:text-primary-light transition-colors"
                 aria-label="Instagram"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-8 border-t border-[var(--color-gray-700)] text-center text-[var(--color-gray-400)] text-sm">
+        <div className="mt-8 pt-8 border-t border-[var(--color-gray-700)] text-center text-white/70 text-sm">
           <p>© {currentYear} ReReadery. All rights reserved.</p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { RowDataPacket, OkPacket } from 'mysql2';
+import { RowDataPacket } from 'mysql2';
+import { ParsedQs } from 'qs';
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -17,7 +18,25 @@ interface CartStatus extends RowDataPacket {
 }
 
 interface Order extends RowDataPacket {
+  order_id: string;
+  buyer_id: string;
   seller_id: string;
+  total_amount: number;
+  payment_status: string;
+  delivery_method: string;
+  created_at: Date;
+}
+
+interface OrderWithDetails extends Order {
+  collection_code: string;
+  title: string;
+  author: string;
+  image: string;
+  seller_name?: string;
+  buyer_name?: string;
+  address?: string;
+  city?: string;
+  postal_code?: string;
 }
 import { pool } from '../database/connection';
 import { v4 as uuidv4 } from 'uuid';
@@ -126,7 +145,7 @@ export class OrderController {
   async getBuyerOrders(req: AuthenticatedRequest, res: Response) {
     try {
       const buyerId = req.user?.id;
-      const { status } = req.query;
+      const status = req.query.status as string | undefined;
 
       let query = `
         SELECT o.*, oi.collection_code,
@@ -150,10 +169,10 @@ export class OrderController {
 
       query += ' ORDER BY o.created_at DESC';
 
-      const [orders] = await pool.query(query, params);
+      const [orders] = await pool.query<OrderWithDetails[]>(query, params);
       res.json(orders);
     } catch (error) {
-      console.error('Error fetching buyer orders:', error);
+      console.error('Error fetching buyer orders:', error instanceof Error ? error.message : 'Unknown error');
       res.status(500).json({ message: 'Internal server error' });
     }
   }
@@ -162,7 +181,7 @@ export class OrderController {
   async getSellerOrders(req: AuthenticatedRequest, res: Response) {
     try {
       const sellerId = req.user?.id;
-      const { status } = req.query;
+      const status = req.query.status as string | undefined;
 
       let query = `
         SELECT o.*, oi.collection_code,
@@ -186,10 +205,10 @@ export class OrderController {
 
       query += ' ORDER BY o.created_at DESC';
 
-      const [orders] = await pool.query(query, params);
+      const [orders] = await pool.query<OrderWithDetails[]>(query, params);
       res.json(orders);
     } catch (error) {
-      console.error('Error fetching seller orders:', error);
+      console.error('Error fetching seller orders:', error instanceof Error ? error.message : 'Unknown error');
       res.status(500).json({ message: 'Internal server error' });
     }
   }
@@ -197,21 +216,21 @@ export class OrderController {
   // Update order status
   async updateOrderStatus(req: AuthenticatedRequest, res: Response) {
     try {
-      const { orderId } = req.params;
+      const orderId = req.params.orderId as string;
       const { status } = req.body;
       const userId = req.user?.id;
 
       // Verify order ownership
-      const [order] = await pool.query<Order[]>(
+      const [orders] = await pool.query<Order[]>(
         'SELECT seller_id FROM orders WHERE order_id = ?',
         [orderId]
       );
 
-      if (!order) {
+      if (!orders || orders.length === 0) {
         return res.status(404).json({ message: 'Order not found' });
       }
 
-      if (order.seller_id !== userId) {
+      if (orders[0].seller_id !== userId) {
         return res.status(403).json({ message: 'Unauthorized to update this order' });
       }
 
@@ -222,18 +241,18 @@ export class OrderController {
 
       res.json({ message: 'Order status updated successfully' });
     } catch (error) {
-      console.error('Error updating order status:', error);
+      console.error('Error updating order status:', error instanceof Error ? error.message : 'Unknown error');
       res.status(500).json({ message: 'Internal server error' });
     }
   }
 
   // Get order details
-  async getOrderDetails(req: Request, res: Response) {
+  async getOrderDetails(req: AuthenticatedRequest, res: Response) {
     try {
-      const { orderId } = req.params;
+      const orderId = req.params.orderId as string;
       const userId = req.user?.id;
 
-      const [order] = await pool.query<Order[]>(
+      const [orders] = await pool.query<OrderWithDetails[]>(
         `SELECT o.*, oi.collection_code,
           b.title, b.author, b.image,
           seller.name as seller_name,
@@ -250,13 +269,13 @@ export class OrderController {
         [orderId, userId, userId]
       );
 
-      if (!order) {
+      if (!orders || orders.length === 0) {
         return res.status(404).json({ message: 'Order not found' });
       }
 
-      res.json(order);
+      res.json(orders[0]);
     } catch (error) {
-      console.error('Error fetching order details:', error);
+      console.error('Error fetching order details:', error instanceof Error ? error.message : 'Unknown error');
       res.status(500).json({ message: 'Internal server error' });
     }
   }
